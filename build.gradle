@@ -2,11 +2,14 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
+        maven { url "http://dl.bintray.com/stefanogualdi/plugins" }
+        maven { url "https://plugins.gradle.org/m2/"}
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
+        classpath "gradle.plugin.com.energizedwork.webdriver-binaries:webdriver-binaries-gradle-plugin:1.4"
     }
 }
 
@@ -17,12 +20,14 @@ apply plugin:"eclipse"
 apply plugin:"idea"
 apply plugin:"war"
 apply plugin:"org.grails.grails-web"
+apply plugin:"com.energizedwork.webdriver-binaries"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url 'http://dl.bintray.com/agorapulse/libs' }
 }
 
 dependencies {
@@ -54,10 +59,25 @@ dependencies {
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.8"
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.grails:grails-web-testing-support"
-    testCompile "org.grails.plugins:geb:1.1.2"
-    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
+    testCompile("org.grails.plugins:geb") {
+        exclude group: 'org.gebish', module: 'geb-spock'
+    }
+    testCompile "org.gebish:geb-spock:$gebVersion"
+    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
+    testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-api:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+
+    compile 'org.grails.plugins:spring-security-core:3.2.2'
+    compile 'org.grails.plugins:spring-security-ui:3.1.2'
+    runtime 'mysql:mysql-connector-java:5.1.46'
+    compile 'org.grails.plugins:grails-melody-plugin:1.72.0'
+    compile "org.grails.plugins:ckeditor:4.5.9.0"
+
+//    runtime project(':grails-spring-security-ui')
 }
 
 bootRun {
@@ -68,10 +88,21 @@ bootRun {
 }
 
 tasks.withType(Test) {
-    systemProperty "geb.env", System.getProperty('geb.env')
+    systemProperty "geb.env", ((System.getProperty('geb.env') ?: System.getenv('geb.env') ) ?: (System.getProperty('gebenv') ?: System.getenv('gebenv') )) ?: 'chromeHeadless'
     systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
-    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
-    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
+}
+
+webdriverBinaries {
+    chromedriver chromeDriverVersion
+    geckodriver geckoDriverVersion
+}
+
+compileJava {
+//raise heap
+    options.fork = true
+    options.forkOptions.with {
+        memoryMaximumSize = '8g'
+    }
 }
 
 assets {

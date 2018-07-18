@@ -33,16 +33,16 @@ html * {
 }
 
 body {
-    background-color: #F5F5F5;
+    background: #ffffff;
     color: #333333;
     overflow-x: hidden; /* prevents box-shadow causing a horizontal scrollbar in firefox when viewport < 960px wide */
-    -moz-box-shadow: 0 0 0.3em #424649;
-    -webkit-box-shadow: 0 0 0.3em #424649;
-    box-shadow: 0 0 0.3em #424649;
+    /*-moz-box-shadow: 0 0 0.3em #4D8618;*/
+    /*-webkit-box-shadow: 0 0 0.3em #4D8618;*/
+    /*box-shadow: 0 0 0.3em #4D8618;*/
 }
 
 #grailsLogo {
-    background-color: #feb672;
+    background-color: #abbf78;
 }
 
 a:hover, a:active {
@@ -84,8 +84,8 @@ img {
 }
 
 .footer {
-    background: #424649;
-    color: #ffffff;
+    /*background: #48802c;*/
+    color: #000;
     clear: both;
     font-size: 0.8em;
     margin-top: 1.5em;
@@ -94,7 +94,7 @@ img {
 }
 
 .footer a {
-    color: #feb672;
+    /*color: #4D8618;*/
 }
 
 .spinner {
@@ -120,9 +120,12 @@ img {
     zoom: 1;
 }
 
+.starter-template .nav li{
+    float: left;
+}
 .nav li {
     display: block;
-    float: left;
+    /*float: left;*/
     list-style-type: none;
     margin-right: 0.5em;
     padding: 0;
@@ -146,7 +149,7 @@ img {
     background-color: #999999;
     color: #ffffff;
     outline: none;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+
 }
 
 .no-borderradius .nav a:focus, .no-borderradius .nav a:hover {
@@ -173,9 +176,7 @@ img {
     background-image: url(../images/skin/database_add.png);
 }
 
-.nav li.dropdown.open ul.dropdown-menu {
-    background-color: #424649;
-}
+
 
 /* CREATE/EDIT FORMS AND SHOW PAGES */
 
@@ -446,7 +447,7 @@ th.desc a {
 }
 
 th:hover, tr:hover {
-    background: #f5f5f5;
+    background: #79b94c;
 }
 
 /* PAGINATION */
@@ -561,7 +562,7 @@ a.skip {
 }
 
 .grails-logo-container {
-    background: #7c7c7c no-repeat 50% 30%;
+    /*background:#79b94c no-repeat 50% 30%;*/
     margin-bottom: 20px;
     color: white;
     height:300px;
