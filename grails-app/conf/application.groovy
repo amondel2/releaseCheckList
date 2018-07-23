@@ -53,11 +53,13 @@ environments {
 	}
 	test {
 		dataSource {
-			username = "sa"
-			password = ''
-			dbCreate = "create-drop"
+			pooled = true
+			jmxExport = true
 			driverClassName = "org.h2.Driver"
-			url = "jdbc:h2:file:myDevDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+			username = "sa"
+			password = ""
+			dbCreate = "create-drop"
+			url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
 		}
 	}
 	production{

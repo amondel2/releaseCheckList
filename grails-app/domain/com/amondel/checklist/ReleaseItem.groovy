@@ -10,14 +10,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 class ReleaseItem implements Serializable {
 
     static constraints = {
-        name nullable: false, unique: ['release'],blank: false
+        name nullable: false, unique: ['releaseSection'],blank: false
         timeNeeded nullable: true, min: 1, blank: false
-        actualTime nullable: true, blank: false, min: 1
-        isCompleted nullable: true, blank: false
+        startTime nullable: true, blank:false
+        endTime nullable: true, blank:false
         user nullable: true, blank: false
-        release nullable: false, blank: false
-
-
+        releaseSection nullable: false, blank: false
     }
 
     static mapping = {
@@ -37,12 +35,18 @@ class ReleaseItem implements Serializable {
         }
     }
 
-    static belongsTo = [releaseSection:ReleaseParallelItems,user:User]
+    @Override
+    String toString(){
+        this.name
+    }
+
+    static belongsTo = [releaseSection:ReleaseParallelItems]
+
 
     //in minutes
     Integer timeNeeded
-    Integer actualTime
-    Boolean isCompleted
+    Date startTime
+    Date endTime
     User user
     String id
     String name

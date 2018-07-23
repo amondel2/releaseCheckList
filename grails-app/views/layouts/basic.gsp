@@ -32,34 +32,19 @@
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
              <sec:ifLoggedIn>
-             	<li><a href="/projectManager">Manage My Project</a></li>
-				 <sec:ifAnyGranted roles="ROLE_REPORTER,ROLE_ADMIN">
-             	<li><a href="/reports">Generate Reports</a></li>
-				 </sec:ifAnyGranted>
+             	<li><a href="/releaseManager">Manage My Releases</a></li>
 				 <sec:ifAnyGranted roles="ROLE_ADMIN">
 					<li class="dropdown">
           				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Administration
         				<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="/employees">Employees</a> </li>
-							<li><a href="/empLocation">Employee Location Codes</a></li>
-							<li><a href="/jobs">Jobs</a></li>
-							<li><a href="/jobSubFunction">Job Sub Function</a></li>
-							<li><a href="/leaveReason">Leave Reason</a> </li>
-							<li><a href="/portfolio">Portfolio</a></li>
-							<li><a href="/project">Projects</a></li>
-							<li><a href="/subProject">Sub Projects</a></li>
+							<li><a href="/releasePackage">Releases</a> </li>
+							<li><a href="/releaseParallelItems">Release Section</a></li>
+							<li><a href="/releaseItem">Release Items</a></li>
+							<li><a href="/user">Users</a></li>
 						 </ul>
 					 </li>
-					 <li class="dropdown">
-          				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Associations
-        				<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="/portfolioProjects">Project and Portfolio</a></li>
-							<li><a href="/employeeBoss">Employee to Boss Relationship</a></li>
-							<li><a href="/portfolioProjectJobs">Jobs to Projects Portfolios</a></li>
-							<li><a href="/jobSubFunction">Jobs to Sub Function</a></li>
-					 </ul>
+
 					 </li>
 				 </sec:ifAnyGranted>
              </sec:ifLoggedIn>
@@ -83,7 +68,7 @@
 		 </div>
      </div>
      <footer class="navbar-fixed-bottom navbar-inverse">
-     		<div class="container" style="color:#FFFFFF;">&copy; 2015<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Aaron Mondelblatt property of IBM. <g:meta name="info.app.version"/>
+     		<div class="container" style="color:#FFFFFF;">&copy; 2015<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Aaron Mondelblatt. <g:meta name="info.app.version"/>
      		</div>
 
     </footer>

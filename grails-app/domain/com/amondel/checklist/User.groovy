@@ -22,9 +22,6 @@ class User implements Serializable {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
     }
 
-    Set<ReleaseItem> getReleaseItems() {
-        (ReleaseItem.findAllByUser(this) as List<ReleaseItem>)*.releaseItem as Set<ReleaseItem>
-    }
 
 
     static constraints = {

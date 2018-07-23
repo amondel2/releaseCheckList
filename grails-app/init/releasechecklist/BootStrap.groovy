@@ -1,4 +1,8 @@
 package releasechecklist
+
+import com.amondel.checklist.ReleaseItem
+import com.amondel.checklist.ReleasePackage
+import com.amondel.checklist.ReleaseParallelItems
 import com.amondel.checklist.User
 import com.amondel.checklist.Role
 import com.amondel.checklist.UserRole
@@ -14,7 +18,17 @@ class BootStrap {
         UserRole.findOrSaveWhere user: admin, role: ur
         UserRole.findOrSaveWhere user: admin, role: ra
         UserRole.findOrSaveWhere user: user, role: ur
+        def rel = ReleasePackage.findOrSaveWhere(name:"First Release",startTime: new Date())
+        def relSec = ReleaseParallelItems.findOrSaveWhere(releasePackage: rel,description: "Shutting down services",orderNum:2)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSec, name: "Shutting down eProof", timeNeeded: 4)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSec, name: "Shutting down eEdit", timeNeeded: 5)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSec, name: "Shutting down Web Services", timeNeeded: 5)
 
+        def relSecPre = ReleaseParallelItems.findOrSaveWhere(isPreRelease: true, releasePackage: rel,description: "send e-mails",orderNum:1)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSecPre, name: "Send An E-mail", timeNeeded: 4)
+
+        def relSecPost = ReleaseParallelItems.findOrSaveWhere(isPostRelease: true, releasePackage: rel,description: "send Confirmation e-mails",orderNum:3)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSecPost, name: "Send An E-mail", timeNeeded: 9)
     }
     def destroy = {
     }

@@ -2,16 +2,18 @@ package com.amondel.checklist
 
 import grails.rest.Resource
 import groovy.transform.EqualsAndHashCode
-import org.apache.commons.lang.builder.HashCodeBuilder
-
 
 @EqualsAndHashCode(includes=['id'])
 @Resource(uri='/ReleaseParallelItems', formats=['json', 'xml'])
 class ReleaseParallelItems implements Serializable {
 
     static constraints = {
-        orderNum nullable: false, min:1, unique: ['release'], blank: false
+        orderNum nullable: false, min:1, unique: ['releasePackage'], blank: false
         description blank: false, nullable: false
+        releasePackage blank: false, nullable: false
+        isPreRelease blank: false, nullable: true
+        isPostRelease blank: false, nullable: true
+
     }
 
     static mapping = {
@@ -31,11 +33,19 @@ class ReleaseParallelItems implements Serializable {
         }
     }
 
+    @Override
+    String toString(){
+        this.description
+    }
 
-    static belongsTo=[release:Release]
+
+    static belongsTo=[releasePackage:ReleasePackage]
     static hasMany=[releaseItems:ReleaseItem]
 
+    String id
     Integer orderNum
-    Release release
+    ReleasePackage releasePackage
     String description
+    Boolean isPreRelease
+    Boolean isPostRelease
 }
