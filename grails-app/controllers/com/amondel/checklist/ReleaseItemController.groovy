@@ -8,7 +8,7 @@ import grails.plugin.springsecurity.annotation.Secured
 class ReleaseItemController {
 
     ReleaseItemService releaseItemService
-
+    static responseFormats = ['html','json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -16,7 +16,7 @@ class ReleaseItemController {
         respond releaseItemService.list(params), model:[releaseItemCount: releaseItemService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond releaseItemService.get(id)
     }
 
@@ -46,7 +46,7 @@ class ReleaseItemController {
         }
     }
 
-    def edit(Long id) {
+    def edit(String id) {
         respond releaseItemService.get(id)
     }
 
@@ -72,7 +72,7 @@ class ReleaseItemController {
         }
     }
 
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             notFound()
             return

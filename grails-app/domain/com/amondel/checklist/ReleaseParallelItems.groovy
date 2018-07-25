@@ -13,12 +13,14 @@ class ReleaseParallelItems implements Serializable {
         releasePackage blank: false, nullable: false
         isPreRelease blank: false, nullable: true
         isPostRelease blank: false, nullable: true
+        isComplete blank: false, nullable: true
 
     }
 
     static mapping = {
         version false
         id generator:'assigned'
+        cache false
     }
 
     def beforeValidate() {
@@ -45,6 +47,7 @@ class ReleaseParallelItems implements Serializable {
     String id
     Integer orderNum
     ReleasePackage releasePackage
+    Boolean isComplete
     String description
     Boolean isPreRelease
     Boolean isPostRelease

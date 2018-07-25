@@ -8,7 +8,7 @@ import static org.springframework.http.HttpStatus.*
 class ReleaseParallelItemsController {
 
     ReleaseParallelItemsService releaseParallelItemsService
-
+    static responseFormats = ['html','json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -16,7 +16,7 @@ class ReleaseParallelItemsController {
         respond releaseParallelItemsService.list(params), model:[releaseParallelItemsCount: releaseParallelItemsService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond releaseParallelItemsService.get(id)
     }
 
@@ -46,7 +46,7 @@ class ReleaseParallelItemsController {
         }
     }
 
-    def edit(Long id) {
+    def edit(String id) {
         respond releaseParallelItemsService.get(id)
     }
 
@@ -72,7 +72,7 @@ class ReleaseParallelItemsController {
         }
     }
 
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             notFound()
             return

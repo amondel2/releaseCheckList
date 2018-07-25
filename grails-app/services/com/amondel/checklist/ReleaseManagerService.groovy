@@ -1,15 +1,85 @@
 package com.amondel.checklist
 
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
+import org.hibernate.*
 
 @Transactional
 class ReleaseManagerService {
+
+    ReleasePackageService releasePackageService
+    SpringSecurityService springSecurityService
+    SessionFactory sessionFactory
 
     def getReleasePackages(showCompleted,showNotStarted=true) {
 
         ReleasePackage.withCriteria {
             showCompleted ? isNotNull(completedTime) : ''
             showNotStarted ?  isNull('completedTime'): ''
+        }
+    }
+
+    def saveCurrentItem(relId,isChecked) {
+        ReleaseItem ri = ReleaseItem.findById(relId)
+        if(isChecked) {
+            ri.endTime = new Date();
+            ri.user = springSecurityService.getCurrentUser()
+        } else {
+            ri.endTime = null
+            ri.user = null
+        }
+        ri.save(flush:true,failOnError:true)
+        [status:"Success"]
+    }
+
+    def saveCurrentSection(relId) {
+        ReleaseParallelItems ri = ReleaseParallelItems.findById(relId)
+        ri.isComplete = true
+        ri.save(flush:true,failOnError:true)
+        [status:"Success"]
+    }
+
+    def getCurrentSection(relId,isCurrItem) {
+        def hibSession = sessionFactory?.getCurrentSession()
+        hibSession?.flush()
+        def items
+        if(isCurrItem?.toString().equals('prev')) {
+            items = ReleaseParallelItems.withCriteria {
+                eq('releasePackage', releasePackageService.get(relId))
+                order 'orderNum', 'desc'
+                eq('isComplete', true)
+            }
+
+        } else {
+            items = ReleaseParallelItems.withCriteria {
+                eq('releasePackage', releasePackageService.get(relId))
+                order 'orderNum', 'asc'
+                or {
+                    eq('isComplete', false)
+                    isNull('isComplete')
+                }
+            }
+        }
+        if(isCurrItem?.toString().equals('prev')) {
+            return items?.get(0)
+        } else if(isCurrItem && Boolean.valueOf(isCurrItem)) {
+            ReleaseItem.where{ releaseSection == items?.get(0) && startTime == null }.updateAll(startTime:new Date())
+            return items?.get(0)
+        } else if(items.size() > 1)  {
+            return items?.getAt(1)
+        } else {
+            return []
+        }
+    }
+
+
+    def getCurrentSectionItems(param) {
+        ReleaseItem.withCriteria {
+            releaseSection{
+                eq('id', param.id)
+            }
+
+           order 'timeNeeded', 'desc'
         }
     }
 }

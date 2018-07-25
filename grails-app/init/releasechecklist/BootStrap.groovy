@@ -25,10 +25,10 @@ class BootStrap {
         ReleaseItem.findOrSaveWhere(releaseSection: relSec, name: "Shutting down Web Services", timeNeeded: 5)
 
         def relSecPre = ReleaseParallelItems.findOrSaveWhere(isPreRelease: true, releasePackage: rel,description: "send e-mails",orderNum:1)
-        ReleaseItem.findOrSaveWhere(releaseSection: relSecPre, name: "Send An E-mail", timeNeeded: 4)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSecPre, name: "Send A start  E-mail", timeNeeded: 4)
 
         def relSecPost = ReleaseParallelItems.findOrSaveWhere(isPostRelease: true, releasePackage: rel,description: "send Confirmation e-mails",orderNum:3)
-        ReleaseItem.findOrSaveWhere(releaseSection: relSecPost, name: "Send An E-mail", timeNeeded: 9)
+        ReleaseItem.findOrSaveWhere(releaseSection: relSecPost, name: "Send An Confirmation E-mail", timeNeeded: 9)
     }
     def destroy = {
     }

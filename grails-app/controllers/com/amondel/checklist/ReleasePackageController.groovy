@@ -7,7 +7,7 @@ import static org.springframework.http.HttpStatus.*
 class ReleasePackageController {
 
     ReleasePackageService releasePackageService
-
+    static responseFormats = ['html','json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -15,7 +15,7 @@ class ReleasePackageController {
         respond releasePackageService.list(params), model:[releasePackageCount: releasePackageService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond releasePackageService.get(id)
     }
 
@@ -45,7 +45,7 @@ class ReleasePackageController {
         }
     }
 
-    def edit(Long id) {
+    def edit(String id) {
         respond releasePackageService.get(id)
     }
 
@@ -71,7 +71,7 @@ class ReleasePackageController {
         }
     }
 
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             notFound()
             return
