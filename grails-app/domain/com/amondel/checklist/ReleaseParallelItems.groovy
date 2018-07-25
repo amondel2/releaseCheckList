@@ -35,6 +35,10 @@ class ReleaseParallelItems implements Serializable {
         }
     }
 
+    Integer getDuration(){
+        this.releaseItems.collect{it.timeNeeded}.max()
+    }
+
     @Override
     String toString(){
         this.description

@@ -61,7 +61,11 @@ class ReleaseManagerService {
             }
         }
         if(isCurrItem?.toString().equals('prev')) {
-            return items?.get(0)
+            try {
+                return items?.get(0)
+            } catch (IndexOutOfBoundsException e) {
+                return []
+            }
         } else if(isCurrItem && Boolean.valueOf(isCurrItem)) {
             ReleaseItem.where{ releaseSection == items?.get(0) && startTime == null }.updateAll(startTime:new Date())
             return items?.get(0)

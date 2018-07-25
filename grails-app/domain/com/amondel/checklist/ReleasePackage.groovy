@@ -36,9 +36,7 @@ class ReleasePackage implements Serializable {
         Integer sum = 0
         this.releaseParallelItems.each{
             if(!it.isPostRelease && !it.isPreRelease) {
-                sum += it.releaseItems.collect { ReleaseItem item ->
-                    item.timeNeeded
-                }.max()
+                sum += it.getDuration()
             }
         }
         sum
