@@ -11,11 +11,14 @@ class ReleaseManagerService {
     SpringSecurityService springSecurityService
     SessionFactory sessionFactory
 
-    def getReleasePackages(showCompleted,showNotStarted=true) {
+    def getReleasePackages(showActive) {
 
         ReleasePackage.withCriteria {
-            showCompleted ? isNotNull(completedTime) : ''
-            showNotStarted ?  isNull('completedTime'): ''
+            if(showActive) {
+                isNull('completedTime')
+            } else {
+                isNotNull('completedTime')
+            }
         }
     }
 
@@ -37,6 +40,14 @@ class ReleaseManagerService {
         ri.isComplete = true
         ri.save(flush:true,failOnError:true)
         [status:"Success"]
+    }
+
+    def saveRelease(relId){
+        ReleasePackage rp = releasePackageService.get(relId)
+        rp.completedTime = new Date();
+        rp.save()
+        [status:"Success"]
+
     }
 
     def getCurrentSection(relId,isCurrItem) {
@@ -66,7 +77,7 @@ class ReleaseManagerService {
             } catch (IndexOutOfBoundsException e) {
                 return []
             }
-        } else if(isCurrItem && Boolean.valueOf(isCurrItem)) {
+        } else if(isCurrItem && Boolean.valueOf(isCurrItem) && items.size() > 0) {
             ReleaseItem.where{ releaseSection == items?.get(0) && startTime == null }.updateAll(startTime:new Date())
             return items?.get(0)
         } else if(items.size() > 1)  {

@@ -15,6 +15,7 @@ class ReleaseItem implements Serializable {
         startTime nullable: true, blank:false
         endTime nullable: true, blank:false
         user nullable: true, blank: false
+        owenedUser nullable: true, blank: false
         releaseSection nullable: false, blank: false
     }
 
@@ -26,6 +27,20 @@ class ReleaseItem implements Serializable {
     def beforeValidate() {
         if(!id || id.equals(null)) {
             id  = Utils.getInstance().idGenerator()
+        }
+    }
+
+    def beforeUpdate() {
+        if(!endTime || endTime.equals(null) ) {
+            user = null
+        } else if (!user || user.equals(null)) {
+            endTime = null
+        }
+    }
+
+    def afterUpdate() {
+        if(!endTime || endTime.equals(null)){
+            ReleaseParallelItems.where{id == releaseSectionId}.updateAll(isComplete: false)
         }
     }
 
@@ -48,6 +63,7 @@ class ReleaseItem implements Serializable {
     Date startTime
     Date endTime
     User user
+    User owenedUser
     String id
     String name
     ReleaseParallelItems releaseSection

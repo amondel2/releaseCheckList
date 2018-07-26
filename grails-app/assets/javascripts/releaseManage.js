@@ -20,7 +20,7 @@ var completeSection = function() {
     $("#prevContainer div").html($("#currContainer div").html());
     $("#prevContainer div input").prop('checked',true);
     $("#prevContainer div input").prop('disabled',true);
-    $("#prevContainer div input").prop('readOnly',true);
+    $("#prevContainer div input").prop('readonly',true);
 
     if($("#nextContainer div").children().find('input').length > 0) {
         getNextItem(true);
@@ -32,7 +32,16 @@ var completeSection = function() {
 };
 
 function completeRelease(){
-
+    $("#nextContainer div").html("");
+    $.ajax( {
+        url: baseDir + "/releaseManager/saveRelease",
+        dataType: 'json',
+        type: 'post',
+        cache: false,
+        data: {id:$("#releaseId").attr('relId')}
+    }).done(function(data) {
+        window.location.href= baseDir + "/releaseManager";
+    });
 }
 
 
@@ -61,11 +70,11 @@ function getNextItem(forCurrent){
                         $("#prevContainer div").html(mydata);
                         $("#prevContainer div input").prop('checked',true);
                         $("#prevContainer div input").prop('disabled',true);
-                        $("#prevContainer div input").prop('readOnly',true);
+                        $("#prevContainer div input").prop('readonly',true);
                     } else {
                         $("#nextContainer div").html(mydata);
                         $("#nextContainer div input").prop('disabled',true);
-                        $("#nextContainer div input").prop('readOnly',true);
+                        $("#nextContainer div input").prop('readonly',true);
                     }
                 });
             } else {

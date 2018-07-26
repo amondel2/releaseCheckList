@@ -7,17 +7,45 @@
 <body>
 <div>
     <h2>Releases</h2>
-    <g:each in="${releasePackageList}" var="item">
-        <div>${item.name} will take ${item.getDuration()} minutes and be completed by ${item.getPredicatedEndTime()}
-            <button rpid="${item.id}">Start </button>
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a data-toggle="tab" dtar="activeRels" isactive="1"  href="#activeRels">Active Release</a></li>
+        <li><a data-toggle="tab" isactive="0"  dtar="prevRels" href="#prevRels">Prev Release</a></li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div id="activeRels" class="tab-pane fade in active">
+            <h3>Active Releases</h3>
+            <div>
+                <g:render template="relTabContent" model="${[releasePackageList:releasePackageList,isActive:true]}"></g:render>
+            </div>
         </div>
-    </g:each>
-    <form id="mngfrm" action="manageRelease" method="post">
+        <div id="prevRels" class="tab-pane fade">
+            <h3>Completed Releases</h3>
+            <div></div>
+        </div>
+    </div>
+
+    <form id="mngfrm" action="/releaseManager/manageRelease" method="post">
         <input type="hidden" id="id" name="id">
     </form>
 </div>
-    <script>
+<script type="text/javascript">
+    $(document).ready(function(){
         $("button").on("click",function(){ $("#id").val($(this).attr('rpid')); $("#mngfrm").submit();});
-    </script>
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e){
+            var activeTab = $(e.target);
+            $.ajax({
+                url:  baseDir + "/releaseManager/getReleasePackages",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                data: {isactive: $(activeTab).attr('isactive')}
+            }).done(function (mydata) {
+                $("#" + $(activeTab).attr('dtar') + " div").html(mydata);
+            });
+
+
+        });
+    });
+</script>
 </body>
 </html>

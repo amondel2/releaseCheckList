@@ -2,17 +2,23 @@ package com.amondel.checklist
 
 import grails.converters.JSON
 import grails.converters.XML
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(['IS_AUTHENTICATED_FULLY'])
+@Secured(['ROLE_USER'])
 class ReleaseManagerController {
 
     static responseFormats = ['html','json', 'xml']
     def releaseManagerService
     ReleasePackageService releasePackageService
+    SpringSecurityService springSecurityService
 
     def index() {
-        respond releaseManagerService.getReleasePackages(false)
+        render(view: "index", model: ['releasePackageList': releaseManagerService.getReleasePackages(true)])
+    }
+
+    def getReleasePackages() {
+        render(template: "relTabContent", model: ['releasePackageList': releaseManagerService.getReleasePackages(params.isactive == '1'),isActive:params.isactive == '1'])
     }
 
     def manageRelease() {
@@ -37,10 +43,6 @@ class ReleaseManagerController {
         }
     }
 
-    def savePackage() {
-        respond releaseManagerService.saveCurrentPackage(params?.id,Boolean.valueOf(params.isChecked))
-    }
-
     def saveItem() {
         respond releaseManagerService.saveCurrentItem(params?.id,Boolean.valueOf(params.isChecked))
     }
@@ -49,7 +51,11 @@ class ReleaseManagerController {
         respond releaseManagerService.saveCurrentSection(params?.id)
     }
 
+    def saveRelease() {
+        respond releaseManagerService.saveRelease(params?.id)
+    }
+
     def getReleaseItems(){
-        render(template: "checkedItems", model: [obj: releaseManagerService.getCurrentSectionItems(params)])
+        render(template: "checkedItems", model: [obj: releaseManagerService.getCurrentSectionItems(params),currUserId:springSecurityService.getCurrentUserId()])
     }
 }
