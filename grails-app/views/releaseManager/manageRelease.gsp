@@ -6,8 +6,8 @@
 </head>
 <body>
 <div>
-    <h2>Releases ${this.releasePackage?.name}</h2>
-    <div class="hidden" id="releaseId" relId="${this.releasePackage?.id}"></div>
+    <h2>${this.releaseName?.toString()}</h2>
+    <div class="hidden" id="releaseId" relId="${params?.id}"></div>
     <div class="row">
         <div id="prevContainer" class="col-sm-4" style="border:1px solid black;">
             <legend>Prev</legend>

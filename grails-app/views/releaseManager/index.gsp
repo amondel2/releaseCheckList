@@ -7,12 +7,19 @@
 <body>
 <div>
     <h2>Releases</h2>
-    <g:each in="${releasePackageList}" var="item">
+    <g:each in="${releaseNameList}" var="item">
         <div>${item.name} will take ${item.getDuration()} minutes and be completed by ${item.getPredicatedEndTime()}
-            <button rpid="${item.id}">Start </button>
+            <button rpid="${item.id}">
+            <g:if test="${item.startTime}">
+                Continue
+            </g:if>
+            <g:else>
+                Start
+            </g:else>
+            </button>
         </div>
     </g:each>
-    <form id="mngfrm" action="manageRelease" method="post">
+    <form id="mngfrm" action="${request.contextPath}/${controllerName}/manageRelease" method="post">
         <input type="hidden" id="id" name="id">
     </form>
 </div>

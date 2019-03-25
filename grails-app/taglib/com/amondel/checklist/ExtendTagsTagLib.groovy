@@ -1,5 +1,7 @@
 package com.amondel.checklist
 
+import groovy.time.TimeCategory
+
 class ExtendTagsTagLib {
 	static namespace="ps"
     static defaultEncodeAs = [taglib:'html']
@@ -10,6 +12,10 @@ class ExtendTagsTagLib {
 		User user = springSecurityService.currentUser
 		  def name =  user ? user.username : ""
 		  out << body() <<name
+	}
+
+	def timeDiff = {attrs,body->
+		out << body() << TimeCategory.minus( attrs.endTime, attrs.startTime ).minutes
 	}
 //	
 //	def renderMonthlyBox = {attrs,body->

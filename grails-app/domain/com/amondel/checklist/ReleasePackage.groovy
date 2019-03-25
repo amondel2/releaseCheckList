@@ -2,22 +2,25 @@ package com.amondel.checklist
 
 import grails.rest.Resource
 import groovy.transform.EqualsAndHashCode
-import org.apache.commons.lang.builder.HashCodeBuilder
-import grails.databinding.BindingFormat
 
 @EqualsAndHashCode(includes=['id'])
 @Resource(uri='/ReleasePackage', formats=['json', 'xml'])
 class ReleasePackage implements Serializable {
 
     static constraints = {
-        name nullable: false, blank: false, unique: true
-        startTime nullable: false, blank: true
+        name nullable: false, blank: false, unique: ['releaseName']
+        orderNumber nullable: false, blank: false, min: 1
+        startTime nullable: true, blank: true
+        isPreRelease blank: false, nullable: true
+        isPostRelease blank: false, nullable: true
         completedTime nullable: true, blank: false
     }
 
     static mapping = {
         version false
         id generator:'assigned'
+        sort orderNumber: "asc"
+
     }
 
     def beforeValidate() {
@@ -32,36 +35,36 @@ class ReleasePackage implements Serializable {
         }
     }
 
-    Integer getDuration(){
+    Integer getDuration(predicted=false){
         Integer sum = 0
-        this.releaseParallelItems.each{
-            if(!it.isPostRelease && !it.isPreRelease) {
-                sum += it.getDuration()
+        this.releasePackageItems?.each {
+            if (!it.isComplete || predicted) {
+                Integer dur = it.getDuration()
+                if (dur > sum) {
+                    sum = dur
+                }
             }
         }
         sum
     }
 
-    Date getPredicatedEndTime() {
-        getPredicatedEndTime(getDuration())
-    }
 
-    Date getPredicatedEndTime(Integer duration) {
-        def cal = Calendar.getInstance()
-        cal.setTime(this.startTime)
-        cal.add(Calendar.MINUTE,duration)
-        cal.getTime()
-    }
 
     @Override
     String toString(){
         this.name
     }
 
-    static hasMany = [releaseParallelItems:ReleaseParallelItems]
+    static belongsTo = [releaseName:ReleaseName]
+    static hasMany = [releasePackageItems:ReleasePackageItems]
 
+    Integer orderNumber
+    ReleaseName releaseName
     Date completedTime
     Date startTime
+    Boolean isPreRelease
+    Boolean isPostRelease
+    Boolean isComplete
     String id
     String name
 }

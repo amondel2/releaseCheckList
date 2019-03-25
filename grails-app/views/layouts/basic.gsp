@@ -13,7 +13,7 @@
 		<asset:javascript src="bootstrap-datepicker.min.js" />
 		<g:layoutHead/>
 		<script>
-        	var baseDir = "${resource(dir: '', file: '')}";
+        	var baseDir = "${request.contextPath}/${controllerName}/";
 		</script>
 	</head>
 	<body>
@@ -33,18 +33,19 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
+            <li><a href="${request.contextPath}/">Home</a></li>
              <sec:ifLoggedIn>
-             	<li><a href="/releaseManager">Manage My Releases</a></li>
+             	<li><a href="${request.contextPath}/releaseManager">Manage My Releases</a></li>
 				 <sec:ifAnyGranted roles="ROLE_ADMIN">
 					<li class="dropdown">
           				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Administration
         				<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="/releasePackage">Releases</a> </li>
-							<li><a href="/releaseParallelItems">Release Section</a></li>
-							<li><a href="/releaseItem">Release Items</a></li>
-							<li><a href="/user">Users</a></li>
+							<li><a href="${request.contextPath}/releaseName">Release Name</a> </li>
+							<li><a href="${request.contextPath}/releaseItem">Release Items</a></li>
+							<li><a href="${request.contextPath}/releasePackage">Release Package</a></li>
+							<li><a href="${request.contextPath}/releasePackageItems">Release Package Item</a></li>
+							<li><a href="${request.contextPath}/user">Users</a></li>
 						 </ul>
 					 </li>
 
@@ -54,7 +55,7 @@
             </ul>
           <ul class="nav navbar-nav navbar-right"><li>
           <sec:ifLoggedIn>
-          	<a href="/employees" title="Edit Profile" class="navbar-brand">Welcome <ps:getUserFName /></a>
+          	<a href="${request.contextPath}/employees" title="Edit Profile" class="navbar-brand">Welcome <ps:getUserFName /></a>
           	<g:link controller="logout" class="navbar-brand" elementId="logout"><g:message code='spring.security.ui.login.logout'/></g:link>
           </sec:ifLoggedIn>
          

@@ -25,7 +25,9 @@ endpoints:
     enabled: false
     jmx:
         enabled: true
-
+server:
+    session:
+        timeout: 3600
 ---
 grails:
     mime:
@@ -44,27 +46,30 @@ grails:
             csv: text/csv
             form: application/x-www-form-urlencoded
             html:
-              - text/html
-              - application/xhtml+xml
+                - text/html
+                - application/xhtml+xml
             js: text/javascript
             json:
-              - application/json
-              - text/json
+                - application/json
+                - text/json
             multipartForm: multipart/form-data
             pdf: application/pdf
             rss: application/rss+xml
             text: text/plain
             hal:
-              - application/hal+json
-              - application/hal+xml
+                - application/hal+json
+                - application/hal+xml
             xml:
-              - text/xml
-              - application/xml
+                - text/xml
+                - application/xml
     urlmapping:
         cache:
             maxsize: 1000
     controllers:
         defaultScope: singleton
+        upload:
+            maxFileSize: 26214400
+            maxRequestSize: 26214400
     converters:
         encoding: UTF-8
     views:
@@ -81,10 +86,22 @@ grails:
 endpoints:
     jmx:
         unique-names: true
-
+upload:
+    directory:
 ---
 hibernate:
     cache:
         queries: false
         use_second_level_cache: false
         use_query_cache: false
+
+environments:
+    production:
+        upload:
+            directory: /opt/tomcat/uploads/
+
+grails:
+    plugin:
+        databasemigration:
+            updateOnStart: true
+            updateOnStartFileName: changelog.groovy

@@ -33,11 +33,13 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 
 String pass = System.getProperty("DB_PASSWORD")?.toString() ?: System.getenv("DB_PASSWORD")?.toString()
 String user = System.getProperty("DB_USER")?.toString()  ?: System.getenv("DB_USER")?.toString()
-String dbString = ( System.getProperty("JDBC_CONNECTION_STRING_AB")?.toString()  ?: System.getenv("JDBC_CONNECTION_STRING_AB")?.toString() ) + "relchecklist?useUnicode=yes&characterEncoding=UTF-8&useSSL=false"
+String dbString = System.getenv("JDBC_CONNECTION_STRING_AB")?.toString() ?: System.getProperty("JDBC_CONNECTION_STRING_AB")?.toString()
+
 dataSource {
 	pooled = true
 	jmxExport = true
-	driverClassName = "com.mysql.jdbc.Driver"
+	driverClassName = "com.mysql.cj.jdbc.Driver"
+	dialect = "org.hibernate.dialect.MySQL8Dialect"
 
 }
 
@@ -45,10 +47,10 @@ environments {
 	development {
 		dataSource {
 			password = pass
-			dbCreate = "create-drop"
 			username = user
 			url= dbString
-			dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
+			dbCreate = "none"
+
 		}
 	}
 	test {
@@ -64,10 +66,12 @@ environments {
 	}
 	production{
 		dataSource {
-			dbCreate = "update"
-
-			dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
-
+			dbCreate = "none"
+			password = pass
+			username = user
+			url= dbString
+			driverClassName = "com.mysql.cj.jdbc.Driver"
+			dialect = "org.hibernate.dialect.MySQL8Dialect"
 			properties {
 				jmxEnabled = true
 				initialSize = 5
@@ -91,3 +95,4 @@ environments {
 	}
 }
 
+server.contextPath='/rel'

@@ -65,7 +65,7 @@ class ReleaseItemServiceSpec extends Specification {
 
     void "test save"() {
         when:
-        ReleaseItem releaseItem = new ReleaseItem(name:"myTest_324324",releaseSection: ReleaseParallelItems.first())
+        ReleaseItem releaseItem = new ReleaseItem(name:"myTest_324324",releaseSection: releasePackageItems.first())
         releaseItemService.save(releaseItem)
 
         then:

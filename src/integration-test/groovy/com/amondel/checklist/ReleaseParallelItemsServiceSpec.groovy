@@ -7,39 +7,39 @@ import org.hibernate.SessionFactory
 
 @Integration
 @Rollback
-class ReleaseParallelItemsServiceSpec extends Specification {
+class releasePackageItemsServiceSpec extends Specification {
 
-    ReleaseParallelItemsService releaseParallelItemsService
+    releasePackageItemsService releasePackageItemsService
     SessionFactory sessionFactory
 
     private String setupData() {
         // TODO: Populate valid domain instances and return a valid ID
-        ReleasePackage rp = ReleasePackage.findOrSaveWhere(name:"First Release")
-         new ReleaseParallelItems(isPreRelease:false,isPostRelease: false,releasePackage: rp, orderNum: 4, description: "number 4").save(flush: true, failOnError: true)
-        new ReleaseParallelItems(isPreRelease:false,isPostRelease: false,releasePackage: rp, orderNum: 5, description: "number 5").save(flush: true, failOnError: true)
-        //new ReleaseParallelItems(...).save(flush: true, failOnError: true)
-        //ReleaseParallelItems releaseParallelItems = new ReleaseParallelItems(...).save(flush: true, failOnError: true)
-        //new ReleaseParallelItems(...).save(flush: true, failOnError: true)
-        //new ReleaseParallelItems(...).save(flush: true, failOnError: true)
-        ReleaseParallelItems.first()?.id
-        //releaseParallelItems.id
+        ReleasePackage rp = ReleasePackage.findOrSaveWhere(name:"First ReleaseName")
+         new releasePackageItems(isPreRelease:false,isPostRelease: false,releasePackage: rp, orderNum: 4, description: "number 4").save(flush: true, failOnError: true)
+        new releasePackageItems(isPreRelease:false,isPostRelease: false,releasePackage: rp, orderNum: 5, description: "number 5").save(flush: true, failOnError: true)
+        //new releasePackageItems(...).save(flush: true, failOnError: true)
+        //releasePackageItems releasePackageItems = new releasePackageItems(...).save(flush: true, failOnError: true)
+        //new releasePackageItems(...).save(flush: true, failOnError: true)
+        //new releasePackageItems(...).save(flush: true, failOnError: true)
+        releasePackageItems.first()?.id
+        //releasePackageItems.id
     }
 
     void "test get"() {
         String id = setupData()
 
         expect:
-        releaseParallelItemsService.get(id) != null
+        releasePackageItemsService.get(id) != null
     }
 
     void "test list"() {
         setupData()
 
         when:
-        List<ReleaseParallelItems> releaseParallelItemsList = releaseParallelItemsService.list(max: 2, offset: 2)
+        List<releasePackageItems> releasePackageItemsList = releasePackageItemsService.list(max: 2, offset: 2)
 
         then:
-        releaseParallelItemsList.size() == 2
+        releasePackageItemsList.size() == 2
 
     }
 
@@ -47,30 +47,30 @@ class ReleaseParallelItemsServiceSpec extends Specification {
         setupData()
 
         expect:
-        releaseParallelItemsService.count() == 5
+        releasePackageItemsService.count() == 5
     }
 
     void "test delete"() {
-        String releaseParallelItemsId = setupData()
+        String releasePackageItemsId = setupData()
 
         expect:
-        releaseParallelItemsService.count() == 5
+        releasePackageItemsService.count() == 5
 
         when:
-        releaseParallelItemsService.delete(releaseParallelItemsId)
+        releasePackageItemsService.delete(releasePackageItemsId)
         sessionFactory.currentSession.flush()
 
         then:
-        releaseParallelItemsService.count() == 4
+        releasePackageItemsService.count() == 4
     }
 
     void "test save"() {
         when:
 
-        ReleaseParallelItems releaseParallelItems = new ReleaseParallelItems(isPreRelease:false,isPostRelease: false, releasePackage: ReleasePackage.first(), orderNum: 20, description: "number 20")
-        releaseParallelItemsService.save(releaseParallelItems)
+        releasePackageItems releasePackageItems = new releasePackageItems(isPreRelease:false,isPostRelease: false, releasePackage: ReleasePackage.first(), orderNum: 20, description: "number 20")
+        releasePackageItemsService.save(releasePackageItems)
 
         then:
-        releaseParallelItems.id != null
+        releasePackageItems.id != null
     }
 }

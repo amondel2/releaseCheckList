@@ -7,7 +7,7 @@ function finishSection() {
     });
     if(!isFinished) { return false;}
     $.ajax( {
-        url: baseDir + "/releaseManager/saveSection",
+        url: baseDir + "saveSection",
         dataType: 'json',
         type: 'post',
         cache: false,
@@ -32,14 +32,29 @@ var completeSection = function() {
 };
 
 function completeRelease(){
+    $.ajax( {
+        url: baseDir + "completeRelease",
+        dataType: 'json',
+        type: 'post',
+        cache: false,
+        data: {id:$("#releaseId").attr('relId')}
+    }) .done(function(data) {
+        if(data.status == "SUCCESS") {
+            window.location.href = baseDir + "index"
 
+        } else {
+
+        }
+    }).fail(function() {
+        alert( "error" );
+    });
 }
 
 
 function getNextItem(forCurrent){
 
     $.ajax( {
-        url: baseDir + "/releaseManager/getNextItem",
+        url: baseDir + "getNextItem",
         dataType: 'json',
         type: 'post',
         cache: false,
@@ -49,7 +64,7 @@ function getNextItem(forCurrent){
             var mydiv = forCurrent;
             if(data.status == "SUCCESS") {
                 $.ajax({
-                    url:  baseDir + "/releaseManager/getReleaseItems",
+                    url:  baseDir + "getReleaseItems",
                     type: "post",
                     dataType: 'text',
                     cache: false,
@@ -89,7 +104,7 @@ $(document).ready(function(){
     getNextItem('prev');
     $("#currContainer div").on("change","input",function() {
         $.ajax( {
-            url: baseDir + "/releaseManager/saveItem",
+            url: baseDir + "saveItem",
             dataType: 'json',
             type: 'post',
             cache: false,

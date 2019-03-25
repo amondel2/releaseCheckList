@@ -7,36 +7,73 @@ import org.hibernate.*
 @Transactional
 class ReleaseManagerService {
 
-    ReleasePackageService releasePackageService
     SpringSecurityService springSecurityService
     SessionFactory sessionFactory
 
-    def getReleasePackages(showCompleted,showNotStarted=true) {
+    def getReleases(ReleaseStatus type) {
+        ReleaseName.withCriteria {
+            switch (type) {
+                case ReleaseStatus.InProgress :
+                    isNull( 'endTime')
+                    isNotNull ('startTime')
+                    order 'startTime', 'asc'
+                    break
+                case ReleaseStatus.NotStarted:
+                    isNull ('startTime')
+                    isNull( 'endTime')
+                    order 'plannedStartTime', 'asc'
+                    break
+                case ReleaseStatus.Completed:
+                    isNotNull ('startTime')
+                    isNotNull ('endTime')
+                    order 'endTime', 'desc'
+                    break
+                case ReleaseStatus.NotFinished:
+                    isNull( 'endTime')
+                    order 'plannedStartTime', 'asc'
+                    break
+            }
 
-        ReleasePackage.withCriteria {
-            showCompleted ? isNotNull(completedTime) : ''
-            showNotStarted ?  isNull('completedTime'): ''
         }
+    }
+
+    def startRelease(relId) {
+        ReleaseName rm = ReleaseName.load(relId)
+        if(!rm.startTime) {
+            rm.startTime = new Date()
+            rm.save()
+        }
+        rm
     }
 
     def saveCurrentItem(relId,isChecked) {
-        ReleaseItem ri = ReleaseItem.findById(relId)
+        ReleasePackageItems ri = ReleasePackageItems.findById(relId)
         if(isChecked) {
-            ri.endTime = new Date();
-            ri.user = springSecurityService.getCurrentUser()
+            ri.isComplete = true
+            ri.endTime = new Date()
+            ri.completedUser = springSecurityService.getCurrentUser()
         } else {
+            ri.isComplete = false
             ri.endTime = null
-            ri.user = null
+            ri.completedUser = null
         }
         ri.save(flush:true,failOnError:true)
-        [status:"Success"]
+        [status:"SUCCESS"]
     }
 
     def saveCurrentSection(relId) {
-        ReleaseParallelItems ri = ReleaseParallelItems.findById(relId)
+        ReleasePackage ri = ReleasePackage.findById(relId)
         ri.isComplete = true
+        ri.completedTime = new Date()
         ri.save(flush:true,failOnError:true)
-        [status:"Success"]
+        [status:"SUCCESS"]
+    }
+
+    def completeRelease(relId) {
+        ReleaseName rp = ReleaseName.load(relId)
+        rp.endTime = new Date()
+        rp.save(flush:true)
+        [status:"SUCCESS"]
     }
 
     def getCurrentSection(relId,isCurrItem) {
@@ -44,33 +81,50 @@ class ReleaseManagerService {
         hibSession?.flush()
         def items
         if(isCurrItem?.toString().equals('prev')) {
-            items = ReleaseParallelItems.withCriteria {
-                eq('releasePackage', releasePackageService.get(relId))
-                order 'orderNum', 'desc'
+            items = ReleasePackage.withCriteria {
+                    releaseName{
+                        eq('id',relId)
+                    }
+                order 'orderNumber', 'desc'
                 eq('isComplete', true)
             }
 
         } else {
-            items = ReleaseParallelItems.withCriteria {
-                eq('releasePackage', releasePackageService.get(relId))
-                order 'orderNum', 'asc'
+            items = ReleasePackage.withCriteria {
+                releaseName{
+                    eq('id',relId)
+                }
+                order 'orderNumber', 'asc'
                 or {
                     eq('isComplete', false)
                     isNull('isComplete')
                 }
             }
+
         }
         if(isCurrItem?.toString().equals('prev')) {
             try {
-                return items?.get(0)
+                return items?.getAt(0)
             } catch (IndexOutOfBoundsException e) {
                 return []
             }
         } else if(isCurrItem && Boolean.valueOf(isCurrItem)) {
-            ReleaseItem.where{ releaseSection == items?.get(0) && startTime == null }.updateAll(startTime:new Date())
-            return items?.get(0)
+            try {
+                ReleasePackage item = items.getAt(0)
+                if(item && !item.startTime) {
+                    item.startTime = new Date()
+                    item.save()
+                    def query = ReleasePackageItems.where {
+                        releasePackage == item
+                    }
+                    query.updateAll(startTime: item.startTime)
+                }
+                return item
+            } catch (IndexOutOfBoundsException e) {
+                return []
+            }
         } else if(items.size() > 1)  {
-            return items?.getAt(1)
+            return items.getAt(1)
         } else {
             return []
         }
@@ -78,12 +132,10 @@ class ReleaseManagerService {
 
 
     def getCurrentSectionItems(param) {
-        ReleaseItem.withCriteria {
-            releaseSection{
+        ReleasePackageItems.withCriteria {
+            releasePackage{
                 eq('id', param.id)
             }
-
-           order 'timeNeeded', 'desc'
         }
     }
 }
