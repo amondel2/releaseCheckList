@@ -15,7 +15,11 @@ class ExtendTagsTagLib {
 	}
 
 	def timeDiff = {attrs,body->
-		out << body() << TimeCategory.minus( attrs.endTime, attrs.startTime ).minutes
+		def td = TimeCategory.minus( attrs.endTime, attrs.startTime )
+		def tt = td.days * 24
+		tt = tt * 60 + ( td.hours * 60 )
+		tt += td.minutes
+		out << body() << tt
 	}
 //	
 //	def renderMonthlyBox = {attrs,body->
