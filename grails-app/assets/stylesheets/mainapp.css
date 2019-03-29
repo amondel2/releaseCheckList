@@ -19,3 +19,7 @@
 	border: 1px solid black;
 	display: inline-block;
 }
+
+td.center_text {
+	text-align: center;
+}

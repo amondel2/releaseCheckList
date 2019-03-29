@@ -55,7 +55,7 @@
             </ul>
           <ul class="nav navbar-nav navbar-right"><li>
           <sec:ifLoggedIn>
-          	<a href="${request.contextPath}/employees" title="Edit Profile" class="navbar-brand">Welcome <ps:getUserFName /></a>
+          	<span class="navbar-brand">Welcome <ps:getUserFName /></span>
           	<g:link controller="logout" class="navbar-brand" elementId="logout"><g:message code='spring.security.ui.login.logout'/></g:link>
           </sec:ifLoggedIn>
          
@@ -72,7 +72,7 @@
 		 </div>
      </div>
      <footer class="navbar-fixed-bottom navbar-inverse">
-     		<div class="container" style="color:#FFFFFF;">&copy; 2015<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear());</script>, Aaron Mondelblatt. <g:meta name="info.app.version"/>
+     		<div class="container" style="color:#FFFFFF;">&copy; 2015<script>new Date().getFullYear()>2010&&document.write("-"+new Date().getFullYear())</script>, Aaron Mondelblatt. <g:meta name="info.app.version"/>
      		</div>
 
     </footer>

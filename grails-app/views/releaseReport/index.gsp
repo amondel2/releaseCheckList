@@ -31,7 +31,7 @@
             </tr>
                 <g:each var="pis" in="${pack.releasePackageItems}" status="j">
                    <tr>
-                       <td>${i+1}.${(char)(65 + j)}</td>
+                       <td class="center_text">${i+1}.${(char)(65 + j)}</td>
                        <td <g:if test="${pis.isComplete}">style="text-decoration: line-through;"</g:if>>${pis.releaseItem.toString()}</td>
                         <td>${pis.getDuration()}</td>
                         <td><g:if test="${pis.endTime}"><ps:timeDiff endTime="${pis.endTime}" startTime="${pis.startTime}" /></g:if></td>
