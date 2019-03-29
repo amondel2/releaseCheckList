@@ -14,7 +14,7 @@ class ReleaseManagerControllerSpec extends Specification implements ControllerUn
     void "Test the index action returns the correct model"() {
         given:
         controller.releaseManagerService = Mock(ReleaseManagerService) {
-            1 * getReleasePackages(false) >> []
+            1 * getReleases(ReleaseStatus.NotFinished) >>  [new ReleaseName()]
         }
 
         when:"The index action is executed"
@@ -22,5 +22,6 @@ class ReleaseManagerControllerSpec extends Specification implements ControllerUn
 
         then:"The model is correct"
         !model.releasePackageList
+        model.releaseNameList.size() == 1
     }
 }
