@@ -11,10 +11,11 @@ buildscript {
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineVersion}"
         classpath "gradle.plugin.com.energizedwork.webdriver-binaries:webdriver-binaries-gradle-plugin:1.4"
         classpath 'org.grails.plugins:database-migration:3.0.4'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
     }
 }
 
-version "0.3:"
+version "0.7"
 group "releasechecklist"
 
 apply plugin:"eclipse"
@@ -24,6 +25,9 @@ apply plugin:"org.grails.grails-web"
 apply plugin:"com.energizedwork.webdriver-binaries"
 apply plugin: "com.bertramlabs.asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
+apply plugin: "org.sonarqube"
+
+
 
 repositories {
     mavenLocal()
@@ -74,10 +78,16 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile 'org.grails.plugins:spring-security-core:3.2.3'
     compile 'org.grails.plugins:spring-security-ui:3.1.2'
-    runtime 'mysql:mysql-connector-java:8.0.15'
+    runtime 'mysql:mysql-connector-java:5.1.47'
     compile "org.grails.plugins:ckeditor:4.5.9.0"
     compile 'org.grails.plugins:database-migration:3.0.4'
     compile 'org.liquibase:liquibase-core:3.5.5'
+    compile group: 'org.docx4j', name: 'docx4j', version: '6.1.2'
+    compile group: 'org.docx4j', name: 'docx4j-ImportXHTML', version: '6.1.0'
+    compile('javax.xml.bind:jaxb-api:2.3.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        exclude group: 'log4j', module: 'log4j'
+    }
 
 }
 

@@ -38,6 +38,10 @@ class ReleaseManagerController {
         }
     }
 
+    def unComplateSection() {
+        respond releaseManagerService.unComplateSection(params.id)
+    }
+
     def saveItem() {
         respond releaseManagerService.saveCurrentItem(params?.id,Boolean.valueOf(params.isChecked))
     }

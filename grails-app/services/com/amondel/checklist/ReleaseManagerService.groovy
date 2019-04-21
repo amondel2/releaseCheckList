@@ -46,6 +46,22 @@ class ReleaseManagerService {
         rm
     }
 
+    def unComplateSection(sectionId) {
+        try {
+            ReleasePackage rp = ReleasePackage.findById(sectionId)
+            rp.isComplete = false
+            rp.completedTime = null
+            def query = ReleasePackageItems.where {
+                releasePackage == rp
+            }
+            rp.save(flush: true)
+            query.updateAll([endTime: null, isComplete: false, completedUser: null])
+            [status: "SUCCESS"]
+        } catch (Exception e) {
+            []
+        }
+    }
+
     def saveCurrentItem(relId,isChecked) {
         ReleasePackageItems ri = ReleasePackageItems.findById(relId)
         if(isChecked) {
@@ -111,14 +127,21 @@ class ReleaseManagerService {
         } else if(isCurrItem && Boolean.valueOf(isCurrItem)) {
             try {
                 ReleasePackage item = items.getAt(0)
-                if(item && !item.startTime) {
+                if(!item?.startTime) {
                     item.startTime = new Date()
                     item.save()
                     def query = ReleasePackageItems.where {
                         releasePackage == item
                     }
                     query.updateAll(startTime: item.startTime)
+                } else {
+                    def query = ReleasePackageItems.where {
+                        releasePackage == item
+                        startTime == null
+                    }
+                    query.updateAll(startTime: item.startTime)
                 }
+
                 return item
             } catch (IndexOutOfBoundsException e) {
                 return []

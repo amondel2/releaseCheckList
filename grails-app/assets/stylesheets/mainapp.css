@@ -23,3 +23,12 @@
 td.center_text {
 	text-align: center;
 }
+
+.strike_text {
+	text-decoration: line-through;
+}
+
+.clear
+{
+	clear: both;
+}

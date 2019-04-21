@@ -38,9 +38,10 @@ String dbString = System.getenv("JDBC_CONNECTION_STRING_AB")?.toString() ?: Syst
 dataSource {
 	pooled = true
 	jmxExport = true
-	driverClassName = "com.mysql.cj.jdbc.Driver"
-	dialect = "org.hibernate.dialect.MySQL8Dialect"
-
+//	driverClassName = "com.mysql.cj.jdbc.Driver"
+//	dialect = "org.hibernate.dialect.MySQL8Dialect"
+	driverClassName = "com.mysql.jdbc.Driver"                                         		
+	dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"   
 }
 
 environments {
@@ -70,8 +71,8 @@ environments {
 			password = pass
 			username = user
 			url= dbString
-			driverClassName = "com.mysql.cj.jdbc.Driver"
-			dialect = "org.hibernate.dialect.MySQL8Dialect"
+			driverClassName = "com.mysql.jdbc.Driver"
+			dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
 			properties {
 				jmxEnabled = true
 				initialSize = 5
@@ -89,7 +90,6 @@ environments {
 				testWhileIdle= true
 				testOnReturn = false
 				jdbcInterceptors = "ConnectionState"
-				defaultTransactionIsolation= 2 // TRANSACTION_READ_COMMITTED
 			}
 		}
 	}

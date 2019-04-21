@@ -50,6 +50,25 @@ function completeRelease(){
     });
 }
 
+var  undoComplation = function() {
+
+    $.ajax( {
+        url: baseDir + "unComplateSection",
+        dataType: 'json',
+        type: 'post',
+        cache: false,
+        data: {id:$("#prevContainer").find('ul').first().attr('sectionId')}
+    }) .done(function(data) {
+        if(data.status == "SUCCESS") {
+            getNextItem(true);
+            getNextItem('false');
+            getNextItem('prev');
+        }
+    }).fail(function() {
+        alert( "error" );
+    });
+};
+
 
 function getNextItem(forCurrent){
 
@@ -112,4 +131,5 @@ $(document).ready(function(){
             data: {isChecked:$(this).prop('checked') ? 'true' : 'false',id:$(this).attr('id')}
         }).done(finishSection());
     });
+    $("#undoBtn").on('click',undoComplation);
 });

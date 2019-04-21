@@ -9,7 +9,7 @@
     <h2>Releases</h2>
     <g:each in="${releaseNameList}" var="item">
         <div>${item.name} will take ${item.getDuration()} minutes and be completed by ${item.getPredicatedEndTime()}
-            <button rpid="${item.id}">
+            <button rpid="${item.id}" class="btn btn-primary">
             <g:if test="${item.startTime}">
                 Continue
             </g:if>

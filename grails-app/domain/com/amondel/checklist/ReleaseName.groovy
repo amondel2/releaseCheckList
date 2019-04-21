@@ -48,9 +48,7 @@ class ReleaseName implements Serializable {
 
     Date getPredicatedEndTime(Integer duration) {
         def cal = Calendar.getInstance()
-        if(startTime) {
-            cal.setTime(startTime)
-        } else if  (plannedStartTime) {
+        if(!startTime && plannedStartTime && plannedStartTime > cal.getTime()) {
             cal.setTime(plannedStartTime)
         }
         cal.add(Calendar.MINUTE,duration)

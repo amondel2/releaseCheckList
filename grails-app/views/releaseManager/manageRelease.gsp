@@ -10,8 +10,8 @@
     <div class="hidden" id="releaseId" relId="${params?.id}"></div>
     <div class="row">
         <div id="prevContainer" class="col-sm-4" style="border:1px solid black;">
-            <legend>Prev</legend>
-            <div></div>
+            <legend>Prev <span style="float: right;"><button class="btn btn-dark" id="undoBtn">Undo Completion</button></span> </legend>
+            <div class="clear"></div>
         </div>
         <div id="currContainer" class="col-sm-4" style="border:1px solid black;">
             <legend>Current</legend>
