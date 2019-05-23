@@ -29,7 +29,7 @@ class ReleaseReportController {
         String cons = "<html><head>$css</head><body>" +  contents.toString() + "</body></html>"
         WordprocessingMLPackage document = releaseReportService.generateReleaseReport(rn, releasePackages,cons.toString())
         response.setContentType("APPLICATION/OCTET-STREAM")
-        response.setHeader("Content-Disposition", "Attachment;Filename=${ReleaseName}_status.docx")
+        response.setHeader("Content-Disposition", "Attachment;Filename=${ReleaseName.toString()}_status.docx")
         def outputStream = response.getOutputStream()
         document.save(outputStream)
         outputStream.flush()
