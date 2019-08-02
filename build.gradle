@@ -15,7 +15,7 @@ buildscript {
     }
 }
 
-version "0.8"
+version "0.9"
 group "releasechecklist"
 
 apply plugin:"eclipse"
@@ -84,7 +84,7 @@ dependencies {
     compile 'org.liquibase:liquibase-core:3.5.5'
 //    compile group: 'org.docx4j', name: 'docx4j', version: '8.0.0'
     compile group: 'org.docx4j', name: 'docx4j-core', version: '8.1.0'
-    compile group: 'org.docx4j', name: 'docx4j-JAXB-Internal', version: '8.1.0'
+    compile group: 'org.docx4j', name: 'docx4j-JAXB-Internal', version: '8.1.2'
     compile group: 'org.docx4j', name: 'docx4j-ImportXHTML', version: '8.0.0'
     compile('javax.xml.bind:jaxb-api:2.3.1') {
         exclude group: 'org.slf4j', module: 'slf4j-log4j12'

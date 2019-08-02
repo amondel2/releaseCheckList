@@ -9,7 +9,7 @@
 </head>
 <body>
 <h2>${release.toString()} Report</h2>
-<button id="wordId" rlId="${release.id}">Export to Word (BETA No cross outs)</button>
+<button id="wordId" rlId="${release.id}">Export to Word (BETA)</button>
 <h3>
     Release <g:if test="${release.startTime}"> has started on ${release.startTime.format('MM/dd/yyyy hh:mm a')} </g:if>
     <g:elseif test="${release.plannedStartTime}"> is planned to start on ${release.plannedStartTime.format('MM/dd/yyyy hh:mm a')}</g:elseif>

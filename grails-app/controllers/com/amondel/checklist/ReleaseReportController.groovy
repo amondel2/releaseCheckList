@@ -24,7 +24,7 @@ class ReleaseReportController {
         def releasePackages = releaseReportService.getPackages(rn)
         String redirectUrl = requestService.getCurrentUrl(request)
         def contents =  g.render  contextPath:"/common", template: 'relReportTable', model: ['packages':releasePackages]
-        def css =  "<link rel=\"stylesheet\" href=\"$redirectUrl/assets/mainapp.css?compile=false\" />"
+        def css = "<link rel=\"stylesheet\" href=\"$redirectUrl/assets/mainapp.css?compile=false\" />"
 
         String cons = "<html><head>$css</head><body>" +  contents.toString() + "</body></html>"
         WordprocessingMLPackage document = releaseReportService.generateReleaseReport(rn, releasePackages,cons.toString())
